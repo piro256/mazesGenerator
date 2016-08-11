@@ -32,10 +32,10 @@ $maze = array();
 for ($i = 0; $i <= $mazeHeight; $i++) {
     for ($j = 0; $j <= $mazeWidth; $j++) {
         if (($i%2 != 0) and ($j%2 != 0)) {
-            $maze[$i][$j]= "CELL";
+            $maze[$i][$j]= "CELL"; //комната
             $mazeMap[$i][$j] = 0;
         } else {
-            $maze[$i][$j]= "WALL";
+            $maze[$i][$j]= "WALL"; //стена
             $mazeMap[$i][$j] = 1;
         }
     }
@@ -44,7 +44,6 @@ for ($i = 0; $i <= $mazeHeight; $i++) {
 //$mazeMap - карта посещений алгоритма
 $currentPointI = $startPointI = 1;
 $currentPointJ = $startPointJ = 1;
-
 do {
     //обнуляем количество шагов для данной точки
     $countStep = 0;
@@ -97,6 +96,7 @@ do {
     }
     //отмечаем текущую клетку посещенной
     $mazeMap[$currentPointI][$currentPointJ] = 2;
+	//выбираем куда пойдем
     $move = rand(0, count($step)-1);
     switch ($step[$move]) {
         case "stepUp":
@@ -124,11 +124,16 @@ do {
     }
     //если ходить некуда возвращаемся на случайную точку из массива $startPoint
     if ($countStep == 0) {
-        //выбираем стартовую точку
+        //выбираем случайную точку из массива стартовых точек
         $startPointsIndex = rand(0, count($startPoints));
+		//устанавливаем текущие координаты из массива начальных точек
         $currentPointI = $startPoints[$startPointsIndex][0];
         $currentPointJ = $startPoints[$startPointsIndex][1];
+		//удаляем выбранную точку из стартового масива
+		//что бы граф имел более 3 вершин из одной точки, надо проверять
+		//кол-во возможных путей и удалять точку только если их меньше одной
         unset($startPoints[$startPointsIndex]);
+		//перечитываем индексы массива
         $startPoints = array_values($startPoints);
     }
 } while (count($startPoints) > 0);
@@ -149,4 +154,3 @@ for ($i = 0; $i <= $mazeHeight; $i++) {
 echo "</table><br>";
 $time = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 printf('Лабиринт построен за %.3F сек.', $time);
-print_r($startPoints);
