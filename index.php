@@ -41,7 +41,7 @@ for ($i = 0; $i <= $mazeHeight; $i++) {
     }
 }
 //пытаемся проложить лабиринт
-//$mazeMap - карта посещений алгоритма
+//$mazeMap - карта посещенных алгоритмом точек
 $currentPointI = $startPointI = 1;
 $currentPointJ = $startPointJ = 1;
 do {
